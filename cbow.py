@@ -8,7 +8,7 @@ class CBOW(nn.Module):
 
         self.encoder = nn.Embedding(num_words, emb_dim, padding_idx=0)
 
-        self.encoder = nn.Linear(emb_dim, num_words)
+        self.decoder = nn.Linear(emb_dim, num_words)
 
     def forward(self, context):
         """
@@ -19,6 +19,6 @@ class CBOW(nn.Module):
         """
         v = self.encoder(context)  # (batch_size, 2*m, emb_dim)
         v = v.mean(dim=1)  # (batch_size, emb_dim)
-        z = self.encoder(v)  # (batch_size, num_words)
+        z = self.decoder(v)  # (batch_size, num_words)
         y_hat = torch.softmax(z, dim=1)
         return y_hat  # Then optimize y with cross entropy loss
